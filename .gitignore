@@ -1,0 +1,4 @@
+/**/.idea/
+/**/docker/apache/**/*.log
+/**/docker/mysql/
+/**/docker/pgsql/

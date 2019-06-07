@@ -1,0 +1,71 @@
+version: '3.1'
+
+services:
+  web:
+    build: ./docker
+    working_dir: /var/www
+    restart: always
+    networks:
+      - mysql-network
+      # - pgsql-network
+    depends_on:
+      - mysql
+      # - pgsql
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ".:/var/www"
+      - "./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf"
+      - "./docker/apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf"
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+      - DOCUMENT_ROOT=/var/www/public_html
+      - APACHE_LOG_DIR=/var/www/docker/apache/logs
+
+  mysql:
+    image: mysql:5.7
+    command: --sql-mode=""
+    restart: always
+    networks:
+      - mysql-network
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./docker/mysql:/var/lib/mysql"
+    environment:
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=development
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - mysql-network
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - '8080:80'
+
+  # pgsql:
+  #   image: postgres
+  #   restart: always
+  #   networks:
+  #     - pgsql-network
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - "./docker/postgres:/var/lib/postgresql"
+  #   environment:
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_PASSWORD=root
+  #     - POSTGRES_DB=development
+
+networks:
+  mysql-network:
+    driver: bridge
+  # pgsql-network:
+  #   driver: bridge
