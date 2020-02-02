@@ -1,4 +1,9 @@
 /**/.idea/
-/**/docker/apache/**/*.log
-/**/docker/mysql/
-/**/docker/pgsql/
+/**/docker/apache/logs/*
+!/**/docker/apache/logs/.gitkeep
+!/**/docker/apache/logs/apache2/.gitkeep
+/**/docker/mysql/*
+!/**/docker/mysql/config
+!/**/docker/mysql/database/.gitkeep
+/**/docker/postgres/*
+!/**/docker/postgres/.gitkeep
