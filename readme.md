@@ -1,4 +1,4 @@
-# Docker PHP 7.2 + Apache2 + Mysql + PostgreSQL
+# Docker PHP 7.3 + Apache2 + Mysql + PostgreSQL
 
 Caso não tenha é preciso instalar o docker e docker-compose.
 
@@ -15,53 +15,62 @@ docker-compose up -d
 
 ## Dependências
 
-- [Apache2](https://httpd.apache.org/) v2.4.25
-- [PHP](https://php.net/) v7.2.18
-  - ctype
-  - curl
-  - date
-  - dom
-  - exif
-  - fileinfo
-  - filter
-  - ftp
-  - gd
-  - hash
-  - iconv
-  - intl
-  - json
-  - libxml
-  - mbstring
-  - mysqli
-  - mysqlnd
-  - openssl
-  - pcre
-  - PDO
-  - pdo_dblib
-  - pdo_mysql
-  - pdo_pgsql
-  - pdo_sqlite
-  - Phar
-  - posix
-  - rar
-  - readline
-  - Reflection
-  - session
-  - SimpleXML
-  - soap
-  - sodium
-  - SPL
-  - sqlite3
-  - standard
-  - tokenizer
-  - xdebug
-  - xml
-  - xmlreader
-  - xmlwriter
-  - xsl
-  - Zend OPcache
-  - zip
-  - zlib
+- [Apache2](https://httpd.apache.org/) v2.4+
+- [PHP](https://php.net/) v7.3+
+
+  - [PHP Modules]
+
+    - bcmath
+    - Core
+    - ctype
+    - curl
+    - date
+    - dom
+    - exif
+    - fileinfo
+    - filter
+    - ftp
+    - gd
+    - hash
+    - iconv
+    - intl
+    - json
+    - libxml
+    - mbstring
+    - mysqli
+    - mysqlnd
+    - openssl
+    - pcre
+    - PDO
+    - pdo_dblib
+    - pdo_mysql
+    - pdo_pgsql
+    - pdo_sqlite
+    - Phar
+    - posix
+    - readline
+    - Reflection
+    - session
+    - SimpleXML
+    - soap
+    - sodium
+    - SPL
+    - sqlite3
+    - standard
+    - tokenizer
+    - xdebug
+    - xml
+    - xmlreader
+    - xmlwriter
+    - xsl
+    - Zend OPcache
+    - zip
+    - zlib
+
+  - [Zend Modules]
+    - Xdebug
+    - Zend OPcache
+
 - [MySQL](https://www.mysql.com/) v5.7.26
 - [PostgreSQL](https://www.postgresql.org/) \*
 
