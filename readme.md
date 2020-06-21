@@ -1,4 +1,4 @@
-# Docker PHP 7.3 + Apache2 + Mysql + PostgreSQL
+# Docker PHP 7.4 + Apache2 + Mysql + PostgreSQL
 
 Caso não tenha é preciso instalar o docker e docker-compose.
 
@@ -16,7 +16,7 @@ docker-compose up -d
 ## Dependências
 
 - [Apache2](https://httpd.apache.org/) v2.4+
-- [PHP](https://php.net/) v7.3+
+- [PHP](https://php.net/) v7.4+
 
   - [PHP Modules]
 

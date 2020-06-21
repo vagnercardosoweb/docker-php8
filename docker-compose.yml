@@ -2,37 +2,36 @@ version: '3'
 
 services:
   web:
-    build: ./docker
+    build: ./.docker
     working_dir: /var/www
-    restart: always
     networks:
-      - mysql-network
-      # - pgsql-network
+      - mysql
+      - pgsql
     depends_on:
       - mysql
-      # - pgsql
+      - pgsql
     ports:
       - '80:80'
       - '443:443'
     volumes:
-      - '.:/var/www'
-      - './docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf'
-      - './docker/apache/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf'
+      - .:/var/www
+      - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/99-php.ini
+      - ./.docker/apache/vhosts/localhost.conf:/etc/apache2/sites-available/000-default.conf
+      - ./.docker/apache/vhosts/localhost-ssl.conf:/etc/apache2/sites-available/default-ssl.conf
     environment:
       - COMPOSER_ALLOW_SUPERUSER=1
       - DOCUMENT_ROOT=/var/www/public_html
-      - APACHE_LOG_DIR=/var/www/docker/apache/logs
+      - APACHE_LOG_DIR=/var/www/.docker/apache/logs
 
   mysql:
     image: mysql:5.7
-    restart: always
     networks:
-      - mysql-network
+      - mysql
     ports:
       - '3306:3306'
     volumes:
-      - './docker/mysql/config:/etc/mysql/conf.d'
-      - './docker/mysql/database:/var/lib/mysql'
+      - './.docker/mysql/data:/var/lib/mysql'
+      - './.docker/mysql/settings:/etc/mysql/conf.d'
     environment:
       - MYSQL_PASSWORD=root
       - MYSQL_ROOT_PASSWORD=root
@@ -41,7 +40,7 @@ services:
   #  phpmyadmin:
   #    image: phpmyadmin/phpmyadmin
   #    networks:
-  #      - mysql-network
+  #      - mysql
   #    depends_on:
   #      - mysql
   #    environment:
@@ -50,22 +49,19 @@ services:
   #    ports:
   #      - '8080:80'
 
-  #  pgsql:
-  #    image: postgres
-  #    restart: always
-  #    networks:
-  #      - pgsql-network
-  #    ports:
-  #      - '5432:5432'
-  #    volumes:
-  #      - './docker/postgres:/var/lib/postgresql/data'
-  #    environment:
-  #      - POSTGRES_USER=root
-  #      - POSTGRES_PASSWORD=root
-  #      - POSTGRES_DB=development
+  pgsql:
+    image: postgres:alpine
+    networks:
+      - pgsql
+    ports:
+      - '5432:5432'
+    volumes:
+      - './.docker/postgres/data:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=development
 
 networks:
-  mysql-network:
-    driver: bridge
-  #  pgsql-network:
-  #    driver: bridge
+  mysql:
+  pgsql:
