@@ -1,5 +1,11 @@
 FROM php:7.4-apache
 
+# Timezone
+ENV TZ=America/Sao_Paulo
+RUN echo $TZ > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
+RUN echo date.timezone = $TZ > /usr/local/etc/php/conf.d/docker-php-ext-timezone.ini
+
 # Atualiza e instala dependências do sistema
 RUN  apt-get update \
   && apt-get upgrade -y \
