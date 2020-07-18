@@ -3,3 +3,4 @@
 !/**/.docker/apache/logs/.gitkeep
 /**/.docker/mysql/data/
 /**/.docker/postgres/data/*
+!/**/.docker/postgres/data/.gitkeep
