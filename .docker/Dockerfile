@@ -75,6 +75,10 @@ RUN echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xd
     echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini &&\
     echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+# Install redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
 # Instala rar
 # RUN pecl -v install rar
 # RUN docker-php-ext-enable rar
