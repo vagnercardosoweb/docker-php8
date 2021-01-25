@@ -1,6 +1,9 @@
 /**/.idea/
+/**/.DS_Store
 /**/.docker/apache/logs/*
 !/**/.docker/apache/logs/.gitkeep
-/**/.docker/mysql/data/
-/**/.docker/postgres/data/*
-!/**/.docker/postgres/data/.gitkeep
+/**/.docker/mysql/*
+!/**/.docker/mysql/config
+!/**/.docker/mysql/database/.gitkeep
+/**/.docker/postgres/*
+!/**/.docker/postgres/.gitkeep

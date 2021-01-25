@@ -1,15 +1,21 @@
 version: '3.7'
 
+networks:
+  php8-network:
+    driver: bridge
+
 services:
   web:
     build: ./.docker
     working_dir: /var/www
+    restart: always
+    container_name: php8-web
     networks:
-      - mysql
-      - pgsql
+      - php8-network
     depends_on:
       - mysql
-      - pgsql
+      # - postgres
+      # - redis
     ports:
       - '80:80'
       - '443:443'
@@ -25,13 +31,15 @@ services:
 
   mysql:
     image: mysql:5.7
+    restart: always
+    container_name: php8-mysql
     networks:
-      - mysql
+      - php8-network
     ports:
       - '3306:3306'
     volumes:
-      - './.docker/mysql/data:/var/lib/mysql'
-      - './.docker/mysql/settings:/etc/mysql/conf.d'
+      - './.docker/mysql/config:/etc/mysql/conf.d'
+      - './.docker/mysql/database:/var/lib/mysql'
     environment:
       - MYSQL_PASSWORD=root
       - MYSQL_ROOT_PASSWORD=root
@@ -39,8 +47,9 @@ services:
 
   #  phpmyadmin:
   #    image: phpmyadmin/phpmyadmin
+  #    container_name: php8-phpmyadmin
   #    networks:
-  #      - mysql
+  #      - php8-network
   #    depends_on:
   #      - mysql
   #    environment:
@@ -49,19 +58,31 @@ services:
   #    ports:
   #      - '8080:80'
 
-  pgsql:
-    image: postgres:alpine
-    networks:
-      - pgsql
-    ports:
-      - '5432:5432'
-    volumes:
-      - './.docker/postgres:/var/lib/postgresql/data'
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=development
+  #  postgres:
+  #    image: postgres:alpine
+  #    container_name: php8-postgres
+  #    restart: always
+  #    networks:
+  #      - php8-network
+  #    ports:
+  #      - '5432:5432'
+  #    volumes:
+  #      - './.docker/postgres:/var/lib/postgresql/data'
+  #    environment:
+  #      - POSTGRES_USER=root
+  #      - POSTGRES_PASSWORD=root
+  #      - POSTGRES_DB=development
 
-networks:
-  mysql:
-  pgsql:
+  #  redis:
+  #    image: bitnami/redis:latest
+  #    restart: always
+  #    container_name: php8-redis
+  #    volumes:
+  #      - ./.docker/redis:/bitnami/redis/data
+  #    networks:
+  #      - php8-network
+  #    environment:
+  #      - ALLOW_EMPTY_PASSWORD=no
+  #      - REDIS_PASSWORD=root
+  #    ports:
+  #      - '6379:6379'

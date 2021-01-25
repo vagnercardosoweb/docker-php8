@@ -1,4 +1,4 @@
-# Docker PHP 7.4 + Apache2 + Mysql + PostgreSQL
+# Docker PHP 8 + Apache2 + Mysql + PostgreSQL
 
 Caso não tenha é preciso instalar o docker e docker-compose.
 
@@ -72,6 +72,7 @@ docker-compose up -d
     - Zend OPcache
 
 - [MySQL](https://www.mysql.com/) v5.7.26
-- [PostgreSQL](https://www.postgresql.org/) \*
+- [PostgreSQL](https://www.postgresql.org/) *
+- [Redis](https://redis.io/) *
 
 Aproveite!
