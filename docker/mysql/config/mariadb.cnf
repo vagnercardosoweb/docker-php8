@@ -1,0 +1,4 @@
+[mysqld]
+skip-networking=0
+skip-bind-address
+skip-name-resolve

@@ -1,4 +1,4 @@
-# Docker PHP 8 + Apache2 + Mysql + PostgreSQL
+# Docker com PHP 8
 
 Caso não tenha é preciso instalar o docker e docker-compose.
 
@@ -11,14 +11,20 @@ Depois de instalar basta rodar no terminal na raiz aonde está o arquivo `docker
 docker-compose up -d
 ```
 
-**-d** significa que será executado em background e seu terminal não irá ficar travado e para matar o processo basta apertar `CTRL + C` no windows ou `Command + C` no mac.
+**-d** significa que será executado em background e seu terminal não irá ficar travado e para matar o processo basta
+apertar `CTRL + C` no windows ou `Command + C` no mac.
 
-## Dependências
+## Images pré configuradas
 
-- [Apache2](https://httpd.apache.org/) v2.4+
-- [PHP](https://php.net/) v7.4+
-
-  - [PHP Modules]
+- [Nginx](https://www.nginx.com/)
+- [Apache2](https://httpd.apache.org/)
+- [MySQL](https://www.mysql.com/)
+- [MariaDB](https://mariadb.com/)
+- [PhpMyAdmin](https://www.phpmyadmin.net/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
+- [PHP 8 FPM](https://php.net/)
+  - [Modules]
 
     - bcmath
     - Core
@@ -70,9 +76,3 @@ docker-compose up -d
   - [Zend Modules]
     - Xdebug
     - Zend OPcache
-
-- [MySQL](https://www.mysql.com/) v5.7.26
-- [PostgreSQL](https://www.postgresql.org/) *
-- [Redis](https://redis.io/) *
-
-Aproveite!
