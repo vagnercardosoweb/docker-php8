@@ -24,8 +24,7 @@ apertar `CTRL + C` no windows ou `Command + C` no mac.
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [PHP 8 FPM](https://php.net/)
-  - [Modules]
-
+  - [PHP Modules]
     - bcmath
     - Core
     - ctype
@@ -48,13 +47,14 @@ apertar `CTRL + C` no windows ou `Command + C` no mac.
     - openssl
     - pcre
     - PDO
-    - pdo_dblib
     - pdo_mysql
     - pdo_pgsql
     - pdo_sqlite
     - Phar
     - posix
+    - rar
     - readline
+    - redis
     - Reflection
     - session
     - SimpleXML
