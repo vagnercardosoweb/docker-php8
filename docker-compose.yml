@@ -1,7 +1,7 @@
-version: '3.7'
+version: "3.7"
 
 networks:
-  docker-php8-network:
+  skeleton-docker.network:
     driver: bridge
 
 services:
@@ -9,84 +9,96 @@ services:
     build: ./docker/php
     restart: always
     tty: true
-    container_name: docker-php8-php
+    container_name: skeleton-docker.php
+    # depends_on:
+    # - mysql
+    # - postgres
+    # - redis
+    # - mariadb
     networks:
-      - docker-php8-network
+      - skeleton-docker.network
     ports:
-      - '9000:9000'
+      - "9000:9000"
     volumes:
-      - .:/home/app
+      - .:/var/www/app.dev
 
   nginx:
     build: ./docker/nginx
-    container_name: docker-php8-nginx
+    container_name: skeleton-docker.nginx
     restart: always
     tty: true
     depends_on:
       - php
+      # - mysql
+      # - postgres
+      # - redis
+      # - mariadb
     ports:
       - "80:80"
       - "433:433"
     volumes:
-      - .:/home/app
+      - .:/var/www/app.dev
     networks:
-      - docker-php8-network
+      - skeleton-docker.network
 
-  #  apache:
-  #    build: ./docker/apache
-  #    restart: always
-  #    container_name: docker-php8-apache
-  #    networks:
-  #      - docker-php8-network
-  #    depends_on:
-  #      - php
-  #      - mariadb
-  #    ports:
-  #      - '80:80'
-  #      - '443:443'
-  #    volumes:
-  #      - .:/home/app
+  # apache:
+  #   build: ./docker/apache
+  #   restart: always
+  #   container_name: skeleton-docker.apache
+  #   networks:
+  #     - skeleton-docker.network
+  #   depends_on:
+  #     - php
+  #     # - mysql
+  #     # - postgres
+  #     # - redis
+  #     # - mariadb
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - .:/var/www/app.dev
 
   #  mariadb:
   #    image: mariadb
   #    tty: true
   #    restart: always
-  #    container_name: docker-php8-mariadb
+  #    container_name: skeleton-docker.mariadb
   #    networks:
-  #      - docker-php8-network
+  #      - skeleton-docker.network
   #    ports:
   #      - '3306:3306'
   #    volumes:
   #      - './docker/mysql/config/mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro'
-  #      - './docker/mysql/database:/var/lib/mysql'
+  #      - './docker/mysql/dbdata:/var/lib/mysql'
   #    environment:
   #      - MYSQL_PASSWORD=root
   #      - MYSQL_ROOT_PASSWORD=root
   #      - MYSQL_DATABASE=development
 
-  #  mysql:
-  #    image: mysql:8
-  #    tty: true
-  #    restart: always
-  #    container_name: docker-php8-mysql
-  #    networks:
-  #      - docker-php8-network
-  #    ports:
-  #      - '3306:3306'
-  #    volumes:
-  #      - './docker/mysql/config/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro'
-  #      - './docker/mysql/database:/var/lib/mysql'
-  #    environment:
-  #      - MYSQL_PASSWORD=root
-  #      - MYSQL_ROOT_PASSWORD=root
-  #      - MYSQL_DATABASE=development
+  # mysql:
+  #   build: ./docker/mysql
+  #   tty: true
+  #   restart: always
+  #   container_name: skeleton-docker.mysql
+  #   networks:
+  #     - skeleton-docker.network
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - "./docker/mysql/config/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+  #     - "./docker/mysql/dbdata:/var/lib/mysql"
+  #   environment:
+  #     - MYSQL_PASSWORD=root
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=development
 
   #  phpmyadmin:
   #    image: library/phpmyadmin
-  #    container_name: docker-php8-phpmyadmin
+  #    container_name: skeleton-docker.phpmyadmin
   #    tty: true
   #    networks:
-  #      - docker-php8-network
+  #      - skeleton-docker.network
   #    depends_on:
   #      - mysql
   #      - mariadb
@@ -99,33 +111,33 @@ services:
   #    ports:
   #      - '8080:80'
 
-  #  postgres:
-  #    image: library/postgres:13-alpine
-  #    container_name: docker-php8-postgres
-  #    tty: true
-  #    restart: always
-  #    networks:
-  #      - docker-php8-network
-  #    ports:
-  #      - '5432:5432'
-  #    volumes:
-  #      - './docker/postgres:/var/lib/postgresql/data'
-  #    environment:
-  #      - POSTGRES_USER=root
-  #      - POSTGRES_PASSWORD=root
-  #      - POSTGRES_DB=development
+  # postgres:
+  #   build: ./docker/postgres
+  #   container_name: skeleton-docker.postgres
+  #   tty: true
+  #   restart: always
+  #   networks:
+  #     - skeleton-docker.network
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - "./docker/postgres/dbdata:/var/lib/postgresql/data"
+  #   environment:
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_PASSWORD=root
+  #     - POSTGRES_DB=development
 
-  #  redis:
-  #    image: bitnami/redis:latest
-  #    restart: always
-  #    tty: true
-  #    container_name: docker-php8-redis
-  #    volumes:
-  #      - ./docker/redis:/bitnami/redis/data
-  #    networks:
-  #      - docker-php8-network
-  #    environment:
-  #      - ALLOW_EMPTY_PASSWORD=no
-  #      - REDIS_PASSWORD=root
-  #    ports:
-  #      - '6379:6379'
+  # redis:
+  #   image: bitnami/redis:latest
+  #   restart: always
+  #   tty: true
+  #   container_name: skeleton-docker.redis
+  #   volumes:
+  #     - ./docker/redis:/bitnami/redis/data
+  #   networks:
+  #     - skeleton-docker.network
+  #   environment:
+  #     - ALLOW_EMPTY_PASSWORD=no
+  #     - REDIS_PASSWORD=root
+  #   ports:
+  #     - "6379:6379"

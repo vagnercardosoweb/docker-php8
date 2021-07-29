@@ -2,13 +2,10 @@
 /**/.DS_Store
 
 /**/docker/redis/*
-/**/docker/mysql/*
-/**/docker/apache/logs/*
-/**/docker/postgres/*
-/**/docker/nginx/logs/*
-!/**/docker/mysql/config
-!/**/docker/mysql/database/.gitkeep
-!/**/docker/postgres/.gitkeep
-!/**/docker/apache/logs/.gitkeep
-!/**/docker/nginx/logs/.gitkeep
 !/**/docker/redis/.gitkeep
+/**/docker/apache/logs/*
+!/**/docker/apache/logs/.gitkeep
+/**/docker/mysql/dbdata/*
+/**/docker/postgres/dbdata/*
+/**/docker/nginx/logs/*
+!/**/docker/nginx/logs/.gitkeep

@@ -1,27 +1,24 @@
 FROM php:8-fpm-alpine
+LABEL MAINTAINER="Vagner Cardoso <vagnercardosoweb@gmail.com>"
 
-# Workdir
-ENV WORKDIR=/home/app
-WORKDIR ${WORKDIR}
+# Environments
+ENV TZ=America/Sao_Paulo
+ENV WORKDIR=/var/www/app.dev
 
 # Updates and installs system dependencies
 RUN apk add --update --no-cache \
-    bash \
-    tzdata \
-    libxml2-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    postgresql-dev \
-    libzip-dev \
-    libxslt-dev \
-    oniguruma-dev \
-    $PHPIZE_DEPS && \
-    rm -rf /var/cache/apk/*
-
-# Timezone
-ENV TZ=America/Sao_Paulo
-RUN echo date.timezone = $TZ > ${PHP_INI_DIR}/conf.d/docker-php-ext-timezone.ini
+  bash \
+  tzdata \
+  libxml2-dev \
+  libpng-dev \
+  libjpeg-turbo-dev \
+  freetype-dev \
+  postgresql-dev \
+  libzip-dev \
+  libxslt-dev \
+  oniguruma-dev \
+  $PHPIZE_DEPS && \
+  rm -rf /var/cache/apk/*
 
 # Configure php dependency
 RUN docker-php-ext-configure soap --enable-soap
@@ -46,36 +43,26 @@ RUN docker-php-ext-install \
   exif \
   soap
 
-# Install xdebug
-RUN pecl install xdebug \
- && docker-php-ext-enable xdebug \
- && echo 'xdebug.start_with_request=no' >> ${PHP_INI_DIR}/conf.d/xdebug.ini \
- && echo 'xdebug.mode=debug' >> ${PHP_INI_DIR}/conf.d/xdebug.ini \
- && echo 'xdebug.client_host=host.docker.internal' >> ${PHP_INI_DIR}/conf.d/xdebug.ini \
- && echo 'xdebug.client_port=9000' >>  ${PHP_INI_DIR}/conf.d/xdebug.ini \
- && echo 'xdebug.remote_cookie_expire_time=36000' >>  ${PHP_INI_DIR}/conf.d/xdebug.ini
-
-# Install extension redis
-RUN pecl -v install redis
-RUN docker-php-ext-enable redis
-
-# Install extension rar
-RUN pecl -v install rar
-RUN docker-php-ext-enable rar
-
-# Copy php settings
-COPY ./php.ini ${PHP_INI_DIR}/conf.d/99-php.ini
+# Install pecl
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+RUN pecl -v install redis && docker-php-ext-enable redis
+RUN pecl -v install rar && docker-php-ext-enable rar
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy files to container
-#COPY . ${WORKDIR}
+# Copy php settings
+COPY ./conf.d ${PHP_INI_DIR}/conf.d
 
-# Installs composer dependencies
-#RUN cd ${WORKDIR}/applcation && composer install -o
+# Workdir
+WORKDIR ${WORKDIR}
+
+# Copy files to container
+#COPY ./ ./
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 
-CMD ["php-fpm"]
+# Run entrypoint
+COPY ./entrypoint.sh /usr/bin/docker-entrypoint
+CMD [ "docker-entrypoint" ]
