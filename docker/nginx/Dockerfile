@@ -1,4 +1,4 @@
-FROM nginx:1.19.7-alpine
+FROM nginx:1.25-alpine
 
 ENV TZ=America/Sao_Paulo
 RUN apk add --update --no-cache tzdata

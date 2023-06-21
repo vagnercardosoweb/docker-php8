@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine
+FROM php:8.2-fpm-alpine
 LABEL MAINTAINER="Vagner Cardoso <vagnercardosoweb@gmail.com>"
 
 # Environments
@@ -7,27 +7,30 @@ ENV WORKDIR=/var/www/app.dev
 
 # Updates and installs system dependencies
 RUN apk add --update --no-cache \
+  zip \
+  unzip \
   bash \
   tzdata \
   libxml2-dev \
   libpng-dev \
+  libwebp-dev \
   libjpeg-turbo-dev \
   freetype-dev \
   postgresql-dev \
   libzip-dev \
   libxslt-dev \
   oniguruma-dev \
+  linux-headers \
   $PHPIZE_DEPS && \
   rm -rf /var/cache/apk/*
 
 # Configure php dependency
 RUN docker-php-ext-configure soap --enable-soap
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
 
 # Install php dependencies
 RUN docker-php-ext-install \
   -j$(nproc) gd \
-  iconv \
   bcmath \
   xml \
   soap \
@@ -41,28 +44,29 @@ RUN docker-php-ext-install \
   intl \
   xsl \
   exif \
+  zip \
   soap
 
 # Install pecl
+RUN pecl channel-update pecl.php.net
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 RUN pecl -v install redis && docker-php-ext-enable redis
-RUN pecl -v install rar && docker-php-ext-enable rar
+# RUN pecl -v install rar && docker-php-ext-enable rar
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Copy php settings
 COPY ./conf.d ${PHP_INI_DIR}/conf.d
 
 # Workdir
+RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
-
-# Copy files to container
-#COPY ./ ./
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 
 # Run entrypoint
 COPY ./entrypoint.sh /usr/bin/docker-entrypoint
+RUN chmod +x /usr/bin/docker-entrypoint
 CMD [ "docker-entrypoint" ]
