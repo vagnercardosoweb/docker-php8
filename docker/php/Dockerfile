@@ -7,22 +7,22 @@ ENV WORKDIR=/var/www/app.dev
 
 # Updates and installs system dependencies
 RUN apk add --update --no-cache \
-  zip \
-  unzip \
-  bash \
-  tzdata \
-  libxml2-dev \
-  libpng-dev \
-  libwebp-dev \
-  libjpeg-turbo-dev \
-  freetype-dev \
-  postgresql-dev \
-  libzip-dev \
-  libxslt-dev \
-  oniguruma-dev \
-  linux-headers \
-  $PHPIZE_DEPS && \
-  rm -rf /var/cache/apk/*
+    zip \
+    unzip \
+    bash \
+    tzdata \
+    libxml2-dev \
+    libpng-dev \
+    libwebp-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    postgresql-dev \
+    libzip-dev \
+    libxslt-dev \
+    oniguruma-dev \
+    linux-headers \
+    $PHPIZE_DEPS && \
+    rm -rf /var/cache/apk/*
 
 # Configure php dependency
 RUN docker-php-ext-configure soap --enable-soap
@@ -30,31 +30,30 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-w
 
 # Install php dependencies
 RUN docker-php-ext-install \
-  -j$(nproc) gd \
-  bcmath \
-  xml \
-  soap \
-  mbstring \
-  pdo \
-  pdo_mysql \
-  pdo_pgsql \
-  mysqli \
-  zip \
-  opcache \
-  intl \
-  xsl \
-  exif \
-  zip \
-  soap
+    -j$(nproc) gd \
+    bcmath \
+    xml \
+    soap \
+    mbstring \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    mysqli \
+    zip \
+    opcache \
+    intl \
+    xsl \
+    exif
 
-# Install pecl
-RUN pecl channel-update pecl.php.net
-RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN pecl -v install redis && docker-php-ext-enable redis
-# RUN pecl -v install rar && docker-php-ext-enable rar
+# Install lib from pecl
+RUN pecl channel-update pecl.php.net \
+    && pecl install -o -f xdebug \
+    && pecl install -o -f redis \
+    && docker-php-ext-enable xdebug redis \
+    && rm -rf /tmp/pear
 
 # Install composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy php settings
 COPY ./conf.d ${PHP_INI_DIR}/conf.d
@@ -63,10 +62,12 @@ COPY ./conf.d ${PHP_INI_DIR}/conf.d
 RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 
-# Expose port 9000 and start php-fpm server
+# Expose port
 EXPOSE 9000
 
-# Run entrypoint
+# Copy entrypoint
 COPY ./entrypoint.sh /usr/bin/docker-entrypoint
 RUN chmod +x /usr/bin/docker-entrypoint
+
+# Start
 CMD [ "docker-entrypoint" ]
