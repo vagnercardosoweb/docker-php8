@@ -5,12 +5,19 @@ LABEL MAINTAINER="Vagner Cardoso <vagnercardosoweb@gmail.com>"
 ENV TZ=America/Sao_Paulo
 ENV WORKDIR=/var/www/app.dev
 
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Updates and installs system dependencies
 RUN apk add --update --no-cache \
+    git \
+    vim \
     zip \
     unzip \
     bash \
+    curl \
     tzdata \
+    icu-dev \
     libxml2-dev \
     libpng-dev \
     libwebp-dev \
@@ -27,6 +34,7 @@ RUN apk add --update --no-cache \
 # Configure php dependency
 RUN docker-php-ext-configure soap --enable-soap
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp
+RUN docker-php-ext-configure pcntl --enable-pcntl
 
 # Install php dependencies
 RUN docker-php-ext-install \
@@ -43,6 +51,8 @@ RUN docker-php-ext-install \
     opcache \
     intl \
     xsl \
+    pcntl \
+    sockets \
     exif
 
 # Install lib from pecl
