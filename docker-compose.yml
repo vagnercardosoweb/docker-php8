@@ -14,12 +14,10 @@ services:
       - mysql
       - postgres
       - redis
-    ports:
-      - "9000:9000"
     networks:
       - docker.network
     volumes:
-      - .:/var/www/app
+      - .:/var/www
 
   nginx:
     build: ./docker/nginx
@@ -34,7 +32,7 @@ services:
     networks:
       - docker.network
     volumes:
-      - .:/var/www/app
+      - .:/var/www
 
   # apache:
   #   build: ./docker/apache
@@ -49,7 +47,7 @@ services:
   #   networks:
   #     - docker.network
   #   volumes:
-  #     - .:/var/www/app
+  #     - .:/var/www
 
   #  mariadb:
   #    image: mariadb
