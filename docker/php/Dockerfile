@@ -1,5 +1,5 @@
 # From
-FROM php:8.2.12-fpm-alpine3.18
+FROM php:8.3.4-fpm-alpine3.19
 
 # Labels
 LABEL creatorName="Vagner dos Santos Cardoso"
@@ -13,7 +13,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN set -eux \
   && apk add --no-cache \
   git vim zip unzip bash curl tzdata icu-libs \
-  c-client make ca-certificates imap gmp gettext libssh2 \
+  c-client make ca-certificates imap gmp gettext libssh2 yaml \
   libintl libxslt libpng libwebp libjpeg-turbo freetype imap \
   linux-headers oniguruma libxslt libpq vips \
   gmp libzip libxml2 freetds
@@ -23,7 +23,7 @@ RUN set -eux \
   && apk add --no-cache --virtual .build_deps \
   libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev imap-dev \
   linux-headers oniguruma-dev libxslt-dev postgresql-dev vips-dev \
-  libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev \
+  libssh2-dev gmp-dev libzip-dev libxml2-dev freetds-dev yaml-dev \
   $PHPIZE_DEPS \
   \
   # Php extensions
@@ -54,6 +54,10 @@ RUN set -eux \
   && pecl install -o -f xdebug \
   && docker-php-ext-enable xdebug \
   \
+  # Install YML
+  && pecl install -o -f yaml \
+  && docker-php-ext-enable yaml \
+  \
   # Install redis
   && pecl install -o -f redis \
   && docker-php-ext-enable redis \
@@ -74,7 +78,7 @@ RUN set -eux \
   && rm -rf /tmp/pear \
   && docker-php-source delete \
   \
-  # Clean up \
+  # Clean up
   && apk del --purge .build_deps \
   && rm -rf /var/cache/apk/*
 

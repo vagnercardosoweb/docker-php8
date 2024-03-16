@@ -1,11 +1,11 @@
-# Docker with PHP 8.2.12
+# Docker with PHP 8.3.4
 
-This repository aims to facilitate the creation of a development environment with php 8.2.12.
+This repository aims to facilitate the creation of a development environment with php 8.3.4
 
 ## What's in the environment:
 
 - [Nginx](https://www.nginx.com/)
-- [Php Fpm](https://php.net/)
+- [PhpFpm](https://php.net/)
 - [Apache2](https://httpd.apache.org/)
 - [MySQL](https://www.mysql.com/)
 - [MariaDB](https://mariadb.com/)
@@ -105,7 +105,6 @@ xdebug.cli_color=1
   exif
   fileinfo
   filter
-  ftp
   gd
   gmp
   hash
@@ -150,6 +149,7 @@ xdebug.cli_color=1
   xmlreader
   xmlwriter
   xsl
+  yaml
   Zend OPcache
   zip
   zlib
